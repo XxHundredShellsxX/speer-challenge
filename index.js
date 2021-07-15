@@ -14,35 +14,25 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(express.json());
 
-dbconnect = async()  => {
-  if(process.env.NODE_ENV == 'test'){
-    const Mockgoose = require('mockgoose').Mockgoose;
-    const mockgoose = new Mockgoose(mongoose);
-  
-    await mockgoose.prepareStorage();
-  }
-  const uri = process.env.DATABASE;
-  mongoose.connect(uri, 
-    { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
-  );
+const uri = process.env.DATABASE;
+mongoose.connect(uri, 
+  { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true }
+);
 
-  const connection = mongoose.connection;
-  connection.once('open', () => {
-    console.log("MongoDB database connection established successfully");
-  })
-  connection.on('reconnected', () => {
-    console.log('Mongo has reconnected')
-  })
-  connection.on('error', error => {
-    console.log('Mongo connection has an error', error)
-    mongoose.disconnect()
-  })
-  connection.on('disconnected', () => {
-    console.log('Mongo connection is disconnected')
-  })
-}
-
-dbconnect();
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log("MongoDB database connection established successfully");
+})
+connection.on('reconnected', () => {
+  console.log('Mongo has reconnected')
+})
+connection.on('error', error => {
+  console.log('Mongo connection has an error', error)
+  mongoose.disconnect()
+})
+connection.on('disconnected', () => {
+  console.log('Mongo connection is disconnected')
+})
 
 
 // for CRUD/REST api endpoints

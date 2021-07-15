@@ -4,6 +4,7 @@ process.env.NODE_ENV = 'test';
 let mongoose = require("mongoose");
 
 var userMethods = require("../controllers/methods/user");
+var ApiError = require("../middleware/ErrorTypes");
 
 //Require the dev-dependencies
 let chai = require('chai');
@@ -36,6 +37,7 @@ describe('User', () => {
             .send(testUser)
             .end((err, res) => {
               res.should.have.status(400);
+              res.body.should.have.property('message').eql(ApiError.UserExistsError.message);
               done();
             })
       });
@@ -49,11 +51,27 @@ describe('User', () => {
               done();
             });
       });
+
+      it('wrong login', (done) => {
+        chai.request(server)
+            .post('/user/login')
+            .send(wrongpass)
+            .end((err, res) => {
+              res.should.have.status(400);
+              res.body.should.have.property('message').eql(ApiError.LoginFailError.message);
+              done();
+            });
+      });
   });
 
 });
 
 const testUser = {
-      username: "else",
-      password: "hello123"
-  };
+  username: "else",
+  password: "hello123"
+};
+
+const wrongpass = {
+  username: "else",
+  password: "hello122"
+}
