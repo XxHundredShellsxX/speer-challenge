@@ -58,4 +58,15 @@ module.exports = {
             }
         }
     },
+    getMessages: async (from, to) => {
+        const fromUser = await User.findOne({ username: from }).populate({ path: 'chatLogs', populate: { path: 'messages' } });
+        if(!fromUser){
+            throw ApiError.UserDNEError;
+        }
+        if(!fromUser.chatLogs.has(to)){
+            return {messages : []}
+        }
+        const chatLogs = fromUser.chatLogs.get(to).messages.map((msg) => {return {text: msg.message, sentBy: msg.postedByUser}});
+        return {messages: chatLogs};
+    }
 }
