@@ -7,7 +7,7 @@ const UserSchema = new Schema(
         identity: {
             type: Object,
             default: {
-                is_admin: false
+                isAdmin: false
             }
         },
         username: {
@@ -15,12 +15,17 @@ const UserSchema = new Schema(
         },
         password: {
             type: String
+        },
+        chatLogs: {
+            type: Map,
+            of: { type: Schema.Types.ObjectId, ref: 'ChatLog' }
         }
     },
     {
         timestamps: true,
         collection: "users"
-    }
+    },
+    
 );
 
 

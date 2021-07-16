@@ -17,6 +17,7 @@ module.exports = {
         const userInfo = {
             username: username,
             password: encryptedPass,
+            chatLogs: {}
         }
 
         const newUser = await User.create(userInfo);
@@ -35,9 +36,9 @@ module.exports = {
         if (!match) {
             throw ApiError.LoginFailError
         }
-        const payload = { "username": user.username };
+        const payload = { username: user.username , isAdmin: user.isAdmin};
         const token = jwt.sign(payload, "SECRET_KEY", {
-            expiresIn: '1m'
+            expiresIn: '1h'
         });
         return {
             success: true,

@@ -1,5 +1,3 @@
-var User = require("../models/user");
-
 var user = require("./methods/user");
 
 module.exports = {

@@ -5,9 +5,6 @@ const mongoose = require('mongoose');
 const { errorHandler } = require('./middleware/ErrorHandler');
 require('dotenv').config();
 
-// const checkAuth = require('./middleware/checkAuth');
-// const userAuth = require('./middleware/userAuth');
-
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -37,20 +34,10 @@ connection.on('disconnected', () => {
 
 // for CRUD/REST api endpoints
 const userRouter = require('./routes/user');
+const chatRouter = require('./routes/chat');
 
 app.use('/user', userRouter);
-
-// app.get('/checkToken', checkAuth, (req,res) => {
-//   res.sendStatus(200);
-// })
-
-// app.post('/userAuth', userAuth, (req,res) => {
-//   res.sendStatus(200);
-// })
-
-// app.get('/clear', (req, res) => {
-//   res.clearCookie('token').status(200).send('Ok.');
-// });
+app.use('/chat', chatRouter);
 
 app.use(errorHandler);
 
